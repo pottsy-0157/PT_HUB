@@ -14,29 +14,25 @@
   <body>
     <!-- Navbar -->
     <nav id="navbar">
-      <!-- Left icons -->
       <div class="nav-icons left">
         <i class="fa-solid fa-bars" id="hamburger"></i>
-        <!-- ... -->
       </div>
-
-      <!-- Center logo + links -->
       <div class="nav-center">
         <a href="index.html" class="logo">PT HUB</a>
         <ul class="nav-links" id="mobileNavLinks">
           <li><a href="#">CLASSES</a></li>
           <li><a href="#">BEHIND THE BRAND</a></li>
-          <li><a href="/WORKOUTS.html">WORKOUTS</a></li>
+          <li><a href="WORKOUTS.html">WORKOUTS</a></li>
         </ul>
       </div>
-      <!-- ... -->
     </nav>
 
     <!-- Workout Sessions -->
     <div class="main-content">
-      <h2>workouts</h2>
-      <h2><span id="friday-date"></span></h2>
+      <h2>Workouts</h2>
 
+      <!-- Dynamic dates will auto-update -->
+      <h2><span id="friday-date"></span></h2>
       <div
         class="session-card"
         onclick="window.location.href='PUSH-CORE.html?name=PUSH-CORE'"
@@ -59,7 +55,6 @@
       </div>
 
       <h2><span id="saturday-date"></span></h2>
-
       <div
         class="session-card"
         onclick="window.location.href='SATURDAY-HYROX.html?name=HYROX SATURDAY'"
@@ -78,13 +73,9 @@
           Weekly planner of workouts. Reminders for booked sessions.
         </p>
         <div class="week-controls">
-          <button id="prevWeek" class="week-btn" aria-label="Previous week">
-            ←
-          </button>
+          <button id="prevWeek" class="week-btn" aria-label="Previous week">←</button>
           <div id="weekLabel" class="week-label"></div>
-          <button id="nextWeek" class="week-btn" aria-label="Next week">
-            →
-          </button>
+          <button id="nextWeek" class="week-btn" aria-label="Next week">→</button>
         </div>
         <div id="weekGrid" class="week-grid"></div>
         <div id="reminderToast" class="reminder-toast" aria-live="polite"></div>
