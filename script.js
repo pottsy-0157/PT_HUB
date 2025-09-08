@@ -1,18 +1,52 @@
 // ==================== NAVBAR SCROLL ====================
-window.addEventListener("scroll", function () {
+window.addEventListener("scroll", () => {
   const navbar = document.getElementById("navbar");
-  if (navbar) {
-    navbar.classList.toggle("scrolled", window.scrollY > 50);
-  }
+  if (navbar) navbar.classList.toggle("scrolled", window.scrollY > 50);
 });
 
 // ==================== WORKOUT DATA ====================
 const workouts = [
-  { title: "PUSH / CORE", day: 5, time: "06:00", message: "YOU GOT THIS!" },
-  { title: "GRIP AND RIP (ERGS)", day: 5, time: "06:00", message: "TOO EASY BABY!" },
-  { title: "HYROX SATURDAY", day: 6, time: "07:30", message: "IT'S EASY!" },
-  // add more workouts here
+  {
+    title: "PUSH / CORE",
+    day: 5, // Friday
+    time: "06:00 am – 07:00 am",
+    message: "YOU GOT THIS!",
+    link: "PUSH-CORE.html?name=PUSH-CORE",
+  },
+  {
+    title: "GRIP AND RIP (ERGS)",
+    day: 5,
+    time: "06:00 am – 07:00 am",
+    message: "TOO EASY BABY!",
+    link: "GRIP-RIP.html?name=GRIP AND RIP (ERGS)",
+  },
+  {
+    title: "HYROX SATURDAY",
+    day: 6, // Saturday
+    time: "07:30 am – 08:30 am",
+    message: "IT'S EASY!",
+    link: "SATURDAY-HYROX.html?name=HYROX SATURDAY",
+  },
+  // add more here
 ];
+
+// ==================== AUTO DATES ABOVE WORKOUTS ====================
+function getWeekdayDate(targetDay) {
+  const today = new Date();
+  const start = new Date(today);
+  start.setDate(today.getDate() - today.getDay()); // Sunday start
+  const targetDate = new Date(start);
+  targetDate.setDate(start.getDate() + targetDay);
+
+  return targetDate.toLocaleDateString("en-GB", {
+    weekday: "short",
+    day: "numeric",
+    month: "short",
+  });
+}
+
+document.getElementById("friday-date").textContent = getWeekdayDate(5);
+document.getElementById("saturday-date").textContent = getWeekdayDate(6);
 
 // ==================== WEEKLY PLANNER / CALENDAR ====================
 (function () {
@@ -20,7 +54,7 @@ const workouts = [
   const label = document.getElementById("weekLabel");
   const prev = document.getElementById("prevWeek");
   const next = document.getElementById("nextWeek");
-  if (!grid || !label || !prev || !next) return;
+  if (!grid || !label) return;
 
   const MS_DAY = 86400000;
   const weekdays = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
@@ -28,12 +62,8 @@ const workouts = [
 
   function startOfWeek(d) {
     const date = new Date(d);
-    const diff = date.getDate() - date.getDay(); // Sunday
-    return new Date(date.setDate(diff));
-  }
-
-  function formatShort(date) {
-    return `${weekdays[date.getDay()]} ${date.getDate()}`;
+    date.setDate(date.getDate() - date.getDay());
+    return date;
   }
 
   function render() {
@@ -49,14 +79,20 @@ const workouts = [
 
       const header = document.createElement("div");
       header.className = "day-header";
-      header.innerHTML = `<span>${formatShort(day)}</span>`;
+      header.innerHTML = `<span>${weekdays[day.getDay()]} ${day.getDate()}</span>`;
 
       const sessions = document.createElement("div");
       sessions.className = "day-sessions";
 
       workouts.forEach((w) => {
         if (day.getDay() === w.day) {
-          addSession(sessions, w.title, w.time, day);
+          const pill = document.createElement("div");
+          pill.className = "session-pill";
+          pill.innerHTML = `<span>${w.time} • ${w.title}</span>`;
+          pill.addEventListener("click", () => {
+            window.location.href = w.link;
+          });
+          sessions.appendChild(pill);
         }
       });
 
@@ -64,13 +100,6 @@ const workouts = [
       dayEl.appendChild(sessions);
       grid.appendChild(dayEl);
     }
-  }
-
-  function addSession(container, name, time, dayDate) {
-    const pill = document.createElement("div");
-    pill.className = "session-pill";
-    pill.innerHTML = `<span>${time} • ${name}</span>`;
-    container.appendChild(pill);
   }
 
   prev.addEventListener("click", () => {
@@ -85,31 +114,9 @@ const workouts = [
   render();
 })();
 
-// ==================== AUTO DATES ABOVE WORKOUTS ====================
-function getWeekdayDate(targetDay) {
-  const today = new Date();
-  const start = new Date(today);
-  start.setDate(today.getDate() - today.getDay()); // Sunday start of week
-  const targetDate = new Date(start);
-  targetDate.setDate(start.getDate() + targetDay);
-
-  const options = { weekday: "short", day: "numeric", month: "short" };
-  return targetDate.toLocaleDateString("en-GB", options);
-}
-
-document.querySelectorAll("[id$='-date']").forEach((el) => {
-  const id = el.id;
-  const dayNum = id.startsWith("friday") ? 5 : id.startsWith("saturday") ? 6 : null;
-  if (dayNum !== null) {
-    el.textContent = getWeekdayDate(dayNum);
-  }
-});
-
 // ==================== MAKE WORKOUT PAGE BIGGER ====================
 const mainContent = document.querySelector(".main-content");
 if (mainContent) {
   mainContent.style.maxWidth = "1200px";
   mainContent.style.margin = "0 auto";
 }
-
-
